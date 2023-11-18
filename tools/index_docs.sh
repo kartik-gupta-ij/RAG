@@ -11,6 +11,4 @@ SCRIPT_PATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 ROOT_PATH=$SCRIPT_PATH/..
 
 
-python -m rag.index.markdown_to_json
-
-# python -m rag.index.ingest
+python -m rag.index.ingest
