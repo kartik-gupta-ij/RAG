@@ -35,6 +35,7 @@ class LLMQuery:
         
         context = "\n".join(r.document for r in contextArray)
         metaprompt = f"""
+        You are a scientist working in a lab. You are asked a question by a colleague.
         Answer the following question using the provided context.
         If you can't find the answer, do not pretend you know it, but answer "I don't know".
 
