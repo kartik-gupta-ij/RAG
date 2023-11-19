@@ -11,7 +11,7 @@ rag_querier=LLMQuery()
 
 
 @app.get("/api/search")
-async def search(question: str):
+async def search(query: str):
     return {
-        "result": rag_querier.query(question)
+        "result": rag_querier.query(query)
     }

@@ -55,7 +55,7 @@ class LLMQuery:
 
         return({
             "answer":response.choices[0].message.content,
-            "context":contextArray
+            "contexts":contextArray
         })
     
 

@@ -50,7 +50,7 @@ def explore_directory(root_dir):
     return "success"
 
 def main():
-    folder_path = os.getenv('QDRANT_PATH')+"/qdrant-landing/content/articles/"
+    folder_path = os.getenv('QDRANT_PATH')+"/qdrant-landing/content/"
     res = explore_directory(folder_path)
     print(res)
 
