@@ -43,13 +43,22 @@ export default function Main() {
       const botMessage = {
         data: data.result.answer,
         sender: "bot",
-        loading: loading,
         timestamp: new Date(),
       };
       setMessages([...messages, botMessage]);
       resetData();
     }
-  }, [data, loading]);
+
+    if (error) {
+      const botMessage = {
+        data: error,
+        sender: "bot",
+        timestamp: new Date(),
+      };
+      setMessages([...messages, botMessage]);
+      resetData();
+    }
+  }, [data, loading,error]);
 
   useEffect(() => {
     if (scrollContainner.current) {
@@ -91,17 +100,10 @@ export default function Main() {
             timestamp={new Date()}
           />
         )}
-        {error && (
-          <BotMessage
-            data={error}
-            timestamp={new Date()}
-          />)}
+        
       </Box>
 
       <Box className={classes.footer}>
-        {/* {messages.length <= 2 && (
-          <DemoSearch handleInputSearch={handleInputSearch} loading={loading} />
-        )} */}
         <DemoSearch handleInputSearch={handleInputSearch} loading={loading} />
         <InputSearch handleInputSearch={handleInputSearch} loading={loading} />
       </Box>
