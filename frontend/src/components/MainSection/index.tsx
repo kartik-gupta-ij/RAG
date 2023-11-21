@@ -1,159 +1,110 @@
-import {
-  Button,
-  Container,
-  TextInput,
-  Box,
-  Image,
-  Title,
-  Text,
-  Loader,
-} from "@mantine/core";
-import { IconSearch } from "@tabler/icons-react";
-import useMountedState from "@/hooks/useMountedState";
+import { Box } from "@mantine/core";
 import { useGetSearchResult } from "@/hooks/useGetSearchResult";
-import { getHotkeyHandler, useHotkeys } from "@mantine/hooks";
 import classes from "./Main.module.css";
 import DemoSearch from "../DemoSearch";
-import { useSearchParams } from "react-router-dom";
-import { useEffect } from "react";
+import { CustomHeader } from "../CustomHeader";
+import InputSearch from "../InputSearch/Index";
+import useMountedState from "@/hooks/useMountedState";
+import UserMessage from "../UserMessage";
+import React, { useEffect } from "react";
+import BotMessage from "../BotMessage";
 
 export default function Main() {
-  const [query, setQuery] = useMountedState("");
   const { data, getSearch, loading, error, resetData } = useGetSearchResult();
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  useHotkeys([
-    [
-      "/",
-      () => {
-        const input = document.querySelector("input");
-        input?.focus();
-      },
-    ],
+  const scrollContainner = React.useRef<HTMLDivElement>(null);
+  const [messages, setMessages] = useMountedState<any[]>([
+    {
+      query: "Hi",
+      sender: "user",
+      timestamp: new Date(),
+    },
+    {
+      data: "Greetings, I am an AI engine designed for RAG functionality. Trained on the Qdrant website, how may I be of assistance to you today?",
+      sender: "bot",
+      timestamp: new Date(),
+    },
   ]);
-  const handleSubmit = () => {
-    resetData();
-    if (query) {
-      getSearch(query);
-      setSearchParams({ query });
-    }
-  };
 
-  const handleDemoSearch = (query: string) => {
+  const handleInputSearch = (query: string) => {
     resetData();
     if (query) {
-      setSearchParams({ query: query });
-      setQuery(query);
+      const userMessage = {
+        query: query,
+        sender: "user",
+        timestamp: new Date(),
+      };
+      setMessages([...messages, userMessage]);
       getSearch(query);
     }
   };
 
   useEffect(() => {
-    if (searchParams.get("query") && searchParams.get("query") !== query) {
-      handleDemoSearch(searchParams.get("query") ?? "");
-    }
-  }, [searchParams.get("query")]);
-
-  useEffect(() => {
-    if (query === "") {
+    if (data) {
+      const botMessage = {
+        data: data.result.answer,
+        sender: "bot",
+        loading: loading,
+        timestamp: new Date(),
+      };
+      setMessages([...messages, botMessage]);
       resetData();
-      window.history.replaceState({}, "", "/");
     }
-  }, [query]);
+  }, [data, loading]);
+
+  useEffect(() => {
+    if (scrollContainner.current) {
+      scrollContainner.current.scroll({
+        top: scrollContainner.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  }, [scrollContainner.current?.scrollHeight, messages, loading, data]);
 
   return (
-    <Container size="lg">
-      <DemoSearch handleDemoSearch={handleDemoSearch} />
-
-      <TextInput
-        radius={4}
-        size="md"
-        leftSection={<IconSearch color="#102252" />}
-        placeholder="Enter a query"
-        rightSection={
-          <Button
-            radius={4}
-            w={"100%"}
-            size={"md"}
-            variant="filled"
-            color="Primary.2"
-            onClick={handleSubmit}
-          >
-            Search
-          </Button>
-        }
-        rightSectionWidth={"6rem"}
-        value={query}
-        pt={"1rem"}
-        required
-        onChange={(event: any) => setQuery(event.currentTarget.value)}
-        onKeyDown={getHotkeyHandler([["Enter", handleSubmit]])}
-        classNames={{ input: classes.input }}
-        style={{
-          position: "sticky",
-          top: 56,
-          zIndex: 100,
-          backgroundColor: "#fff",
-        }}
-        ref={(input) => input && input.focus()}
-      />
-      {data && (
-        <Box pt={"1rem"}>
-          <Text>Answer: {data.result.answer}</Text>
-          {data.result.contexts.map((context) => {
+    <Box className={classes.main}>
+      <CustomHeader />
+      <Box className={classes.content} ref={scrollContainner}>
+        {messages.map((message, index) => {
+          if (message.sender === "user") {
             return (
-              <Box>
-                <Text>File: {context.metadata.path}</Text>
-                <Text>document: {context.metadata.document}</Text>
-                <Text>Score: {context.score}</Text>
-              </Box>
+              <UserMessage
+                key={index}
+                query={message.query ?? ""}
+                timestamp={message.timestamp}
+              />
             );
-          })}
-        </Box>
-      )}
-      {!data && !loading && !error && (
-        <>
-          <Box
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Image
-              src="/landing.gif"
-              alt="Qdrant Landing"
-              maw={400}
-              h={400}
-              fit="contain"
-            />
-            <Title order={3} className={classes.heading}>
-              Qdrant{" "}
-              <span className={classes.headingHighlight}>Code Search</span>{" "}
-              Unleashing Semantic Power
-            </Title>
-            <Text className={classes.subHeading}>
-              Qdrant Code Explorer: Empowering Semantic Searching in Qdrant
-              Repository with Advanced Code Analysis
-            </Text>
-          </Box>
-        </>
-      )}
-      {loading && (
-        <Box className={classes.loader}>
-          <Loader type="bars" />
-        </Box>
-      )}
-      {error && (
-        <Box>
-          <Image src="/error.gif" alt="Error" h={400} fit="contain" />
+          } else {
+            return (
+              <BotMessage
+                key={index}
+                data={message.data}
+                timestamp={message.timestamp}
+              />
+            );
+          }
+        })}
 
-          <Text className={classes.subHeading}>
-            Something went wrong, {error}
-          </Text>
-        </Box>
-      )}
-    </Container>
+        {loading && (
+          <BotMessage
+            loading={loading}
+            data={"Loading..."}
+            timestamp={new Date()}
+          />
+        )}
+        {error && (
+          <BotMessage
+            data={error}
+            timestamp={new Date()}
+          />)}
+      </Box>
+
+      <Box className={classes.footer}>
+        {/* {messages.length <= 2 && (
+          <DemoSearch handleInputSearch={handleInputSearch} loading={loading} />
+        )} */}
+        <DemoSearch handleInputSearch={handleInputSearch} loading={loading} />
+        <InputSearch handleInputSearch={handleInputSearch} loading={loading} />
+      </Box>
+    </Box>
   );
 }

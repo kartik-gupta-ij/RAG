@@ -1,0 +1,14 @@
+.wrapper {
+  align-self: flex-start;
+  padding: var(--mantine-spacing-md);
+  background-color: #FFFFFF;
+  position: relative;
+  max-width: 80%;
+  border-radius: var(--mantine-radius-md);
+}
+.tail {
+  left: -8px;
+  position: absolute;
+  top: 0;
+  color: #FFFFFF;
+}

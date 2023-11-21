@@ -6,6 +6,7 @@ import {
   Title,
   Text,
   Image,
+  ActionIcon,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import classes from "./CustomHeader.module.css";
@@ -17,40 +18,15 @@ export function CustomHeader() {
 
   return (
     <header className={classes.header}>
-      <Container size="lg" className={classes.inner}>
+      <Container size={"xl"} className={classes.inner}>
         <Logo size={35} />
         <Group gap={5} wrap="nowrap">
-          <Button
-            color="Neutral.6"
-            variant="subtle"
-            className={classes.link}
-            component="a"
-            href="https://github.com/qdrant/demo-code-search/blob/master/README.md"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Docs
+          <Button variant="transparent" color="#54646F" onClick={handlers.open}>
+            How does it work?
           </Button>
-          <Button
-            color="Neutral.6"
-            variant="subtle"
-            className={classes.link}
-            onClick={handlers.open}
-          >
-            About
-          </Button>
-          <Button
-            color="Neutral.6"
-            variant="subtle"
-            className={classes.link}
-            component="a"
-            href="https://github.com/qdrant/demo-code-search"
-            target="_blank"
-            rel="noopener noreferrer"
-            leftSection={<IconBrandGithub size={20} />}
-          >
-            GitHub
-          </Button>
+          <ActionIcon variant="transparent" color="#54646F">
+            <IconBrandGithub />
+          </ActionIcon>
         </Group>
       </Container>
       <Modal opened={opened} onClose={handlers.close} centered size={"lg"}>

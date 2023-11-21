@@ -1,0 +1,6 @@
+.inputBox {
+  display: flex;
+  padding: var(--mantine-spacing-xs);
+  align-items: center;
+  padding-top: 0;
+}
