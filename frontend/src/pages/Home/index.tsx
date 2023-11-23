@@ -14,19 +14,8 @@ const MainElement: FC = () => {
 
 export default function Home() {
   return (
-    <Box
-      style={{
-        height: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        background: "linear-gradient(180deg, #DC244C 15%, #E2E1DC 15%)",
-      }}
-    >
-      <Box className={classes.main}>
-      
-        <MainElement />
-      </Box>
+    <Box className={classes.main}>
+      <MainElement />
     </Box>
   );
 }

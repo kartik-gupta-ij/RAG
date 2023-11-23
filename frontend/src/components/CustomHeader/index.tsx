@@ -18,17 +18,16 @@ export function CustomHeader() {
 
   return (
     <header className={classes.header}>
-      <Container size={"xl"} className={classes.inner}>
-        <Logo size={35} />
-        <Group gap={5} wrap="nowrap">
-          <Button variant="transparent" color="#54646F" onClick={handlers.open}>
-            How does it work?
-          </Button>
-          <ActionIcon variant="transparent" color="#54646F">
-            <IconBrandGithub />
-          </ActionIcon>
-        </Group>
-      </Container>
+      <Logo size={35} />
+      <Group gap={5} wrap="nowrap">
+        <Button variant="transparent" color="#54646F" onClick={handlers.open}>
+          How does it work?
+        </Button>
+        <ActionIcon variant="transparent" color="#54646F">
+          <IconBrandGithub />
+        </ActionIcon>
+      </Group>
+
       <Modal opened={opened} onClose={handlers.close} centered size={"lg"}>
         <Modal.Header
           style={{

@@ -21,7 +21,16 @@ class Searcher:
             )
         return contextArray
 
-
+# "steps":[
+# {
+#    "name": "prepare request to db"
+#    "context": "....."
+# },
+# {
+#   "name": "DB response",
+#   "context": "...."
+# }
+# ]
 
 
 class LLMQuery:
@@ -31,11 +40,25 @@ class LLMQuery:
         self.OpenAIclient = OpenAI()
 
     def query(self, question, limit=5) -> dict:
+        steps=[]
+
+        steps.append({
+            "name": "Prepare request to db",
+            "context": "Question is changed in vector embedding space and searched the similar point in the database"
+        })
+
         contextArray = self.searcher.search(question, limit=limit)
+
+      
         
         context = "\n".join(r.document for r in contextArray)
+        steps.append({
+            "name": "DB response",
+            "context":f""" DB returns the most similar points: {context}"""
+        })
+
+
         metaprompt = f"""
-        You are a scientist working in a lab. You are asked a question by a colleague.
         Answer the following question using the provided context.
         If you can't find the answer, do not pretend you know it, but answer "I don't know".
 
@@ -46,17 +69,23 @@ class LLMQuery:
 
         Answer:
         """
+      
+        steps.append({
+            "name": "Prepare request to OpenAI",
+            "context": "Metaprompt is prepared and sent to OpenAI"
+        })
 
         response = self.OpenAIclient.chat.completions.create(model="gpt-3.5-turbo",
         messages=[
             {"role": "user", "content": metaprompt},
         ],
         timeout=10.0)
-
-        return({
-            "answer":response.choices[0].message.content,
-            "contexts":contextArray
+        steps.append({
+            "name": "Answer",
+            "context": {response.choices[0].message.content}
         })
+
+        return(steps)
     
 
 

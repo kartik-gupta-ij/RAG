@@ -5,7 +5,7 @@
   margin: 0 auto;
   padding: var(--mantine-spacing-md);
   gap: var(--mantine-spacing-sm);
-  overflow: scroll;
+  overflow-x: scroll;
 }
 
 .demoBtn {
