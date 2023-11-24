@@ -4,17 +4,9 @@ import useMountedState from "./useMountedState";
 
 export type searchResponse = {
   result: {
-    answer: string;
-    contexts: {
-      id: string;
-      document: string;
-      metadata: {
-        document: string;
-        path: string;
-      };
-      score: number;
-    }[];
-  };
+    name: string;
+    context: string;
+  }[];
 };
 export const useGetSearchResult = () => {
   const [data, setData] = useMountedState<searchResponse | null>(null);

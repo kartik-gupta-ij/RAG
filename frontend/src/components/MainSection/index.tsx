@@ -19,7 +19,9 @@ export default function Main() {
       timestamp: new Date(),
     },
     {
-      data: "Greetings, I am an AI engine designed for RAG functionality. Trained on the Qdrant website, how may I be of assistance to you today?",
+      name: "Qdrant Bot",
+      context:
+        "Greetings, I am an AI engine designed for RAG functionality. Trained on the Qdrant website, how may I be of assistance to you today?",
       sender: "bot",
       timestamp: new Date(),
     },
@@ -40,25 +42,28 @@ export default function Main() {
 
   useEffect(() => {
     if (data) {
-      const botMessage = {
-        data: data.result.answer,
-        sender: "bot",
-        timestamp: new Date(),
-      };
-      setMessages([...messages, botMessage]);
-      resetData();
+      const botMessages = data.result.map((item: any) => {
+        return {
+          context: item.context,
+          name: item.name,
+          sender: "bot",
+          timestamp: new Date(),
+        };
+      });
+      setMessages([...messages, ...botMessages]);
     }
 
     if (error) {
       const botMessage = {
-        data: error,
+        name: "Error",
+        context: error,
         sender: "bot",
         timestamp: new Date(),
       };
       setMessages([...messages, botMessage]);
       resetData();
     }
-  }, [data, loading,error]);
+  }, [data, loading, error]);
 
   useEffect(() => {
     if (scrollContainner.current) {
@@ -86,7 +91,8 @@ export default function Main() {
             return (
               <BotMessage
                 key={index}
-                data={message.data}
+                context={message.context}
+                name={message.name}
                 timestamp={message.timestamp}
               />
             );
@@ -96,11 +102,11 @@ export default function Main() {
         {loading && (
           <BotMessage
             loading={loading}
-            data={"Loading..."}
+            name={"Loading..."}
+            context={"Please wait while I search for your query..."}
             timestamp={new Date()}
           />
         )}
-        
       </Box>
 
       <Box className={classes.footer}>

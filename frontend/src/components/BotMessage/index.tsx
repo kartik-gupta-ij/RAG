@@ -1,9 +1,11 @@
-import { Box, Center, Loader, Text } from "@mantine/core";
+import { Box, Button, Center, Loader, Text } from "@mantine/core";
 import classes from "./BotMessage.module.css";
+import useMountedState from "@/hooks/useMountedState";
 
 type BotMessageProps = {
-  data: any;
   timestamp: Date;
+  context: string;
+  name: string;
   loading?: boolean;
 };
 
@@ -18,11 +20,17 @@ function formatAMPM(date: Date) {
   return strTime;
 }
 
+const TRUNCATION_LIMIT = 1000;
+
 export default function BotMessage({
-  data,
+  name,
+  context,
   timestamp,
   loading,
 }: BotMessageProps) {
+  const [isTruncated, setIsTruncated] = useMountedState(
+    context.length > TRUNCATION_LIMIT
+  );
   return (
     <Box className={classes.wrapper}>
       <span className={classes.tail}>
@@ -47,7 +55,6 @@ export default function BotMessage({
           ></path>
         </svg>
       </span>
-      {/* <Text>{data?.result?.answer ?? ""}</Text> */}
 
       {loading ? (
         <Center>
@@ -55,9 +62,25 @@ export default function BotMessage({
         </Center>
       ) : (
         <>
-          <Text size="sm" color="neutral.6">
-            {data}
+          <Text size="md" color="neutral.7">
+            {name}
           </Text>
+          <Text
+            size="sm"
+            color="neutral.6"
+            lineClamp={isTruncated ? 4 : undefined}
+          >
+            {context}
+          </Text>
+          {isTruncated && (
+            <Button
+              variant="transparent"
+              p={0}
+              onClick={() => setIsTruncated(false)}
+            >
+              Read More
+            </Button>
+          )}
           <Text size="xs" color="neutral.6">
             {formatAMPM(timestamp)}
           </Text>
