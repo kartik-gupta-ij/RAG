@@ -44,7 +44,7 @@ export default function UserMessage({ query, timestamp }: userMessageProps) {
       <Text size="sm" color="neutral.6">
         {query}
       </Text>
-      <Text size="xs" color="neutral.6">
+      <Text size="xs" color="neutral.6" ta={"end"} mt={"xs"}>
         {formatAMPM(timestamp)}
       </Text>
     </Box>

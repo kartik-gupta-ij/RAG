@@ -1,7 +1,7 @@
 .wrapper {
   align-self: flex-start;
   padding: var(--mantine-spacing-md);
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   position: relative;
   max-width: 80%;
   border-radius: var(--mantine-radius-md);
@@ -10,5 +10,17 @@
   left: -8px;
   position: absolute;
   top: 0;
-  color: #FFFFFF;
+  color: #ffffff;
+}
+
+.step {
+  border: 1px solid #e3e3e3;
+  border-radius: var(--mantine-radius-md);
+  padding: var(--mantine-spacing-md);
+  margin-top: var(--mantine-spacing-md);
+}
+.viewSteps {
+  border-top: 1px solid #e3e3e3;
+  padding-bottom: 0;
+  padding-top: var(--mantine-spacing-md);
 }

@@ -1,11 +1,14 @@
-import { Box, Button, Center, Loader, Text } from "@mantine/core";
+import { Box, Button, Center, Loader, Modal, Text } from "@mantine/core";
 import classes from "./BotMessage.module.css";
 import useMountedState from "@/hooks/useMountedState";
+import { searchResponse } from "@/hooks/useGetSearchResult";
+import { useDisclosure } from "@mantine/hooks";
+import { IconArrowDown, IconArrowUp, IconExternalLink} from "@tabler/icons-react";
 
 type BotMessageProps = {
   timestamp: Date;
-  context: string;
-  name: string;
+  answer: string;
+  steps: searchResponse["result"]["steps"];
   loading?: boolean;
 };
 
@@ -23,14 +26,12 @@ function formatAMPM(date: Date) {
 const TRUNCATION_LIMIT = 1000;
 
 export default function BotMessage({
-  name,
-  context,
+  answer,
+  steps,
   timestamp,
   loading,
 }: BotMessageProps) {
-  const [isTruncated, setIsTruncated] = useMountedState(
-    context.length > TRUNCATION_LIMIT
-  );
+  const [opened, { open, close }] = useDisclosure();
   return (
     <Box className={classes.wrapper}>
       <span className={classes.tail}>
@@ -62,30 +63,79 @@ export default function BotMessage({
         </Center>
       ) : (
         <>
-          <Text size="md" color="neutral.7">
-            {name}
-          </Text>
-          <Text
-            size="sm"
-            color="neutral.6"
-            lineClamp={isTruncated ? 4 : undefined}
-          >
-            {context}
-          </Text>
-          {isTruncated && (
-            <Button
-              variant="transparent"
-              p={0}
-              onClick={() => setIsTruncated(false)}
-            >
-              Read More
-            </Button>
-          )}
-          <Text size="xs" color="neutral.6">
+          <TruncationText>{answer}</TruncationText>
+
+          <Text size="xs" color="neutral.6" mt={"xs"} ta={"end"}>
             {formatAMPM(timestamp)}
           </Text>
+          {steps.length > 0 && (
+            <Button
+              variant="transparent"
+              onClick={open}
+              fullWidth
+              className={classes.viewSteps}
+              leftSection={<IconExternalLink />}
+            >
+              View Steps
+            </Button>
+          )}
         </>
       )}
+      <Modal opened={opened} onClose={close} size={"xl"} centered>
+        <Box>
+          <Box className={classes.modalHeader}>
+            <Text fw={500} size="lg" color="Primary" ta={"center"}>
+              Steps which were required to get this answer !
+            </Text>
+          </Box>
+          <Box className={classes.modalContent}>
+            {steps.map((step, index) => {
+              return (
+                <Box className={classes.step} key={index}>
+                  <Text size="md" color="neutral.7">
+                    {step.name}
+                  </Text>
+                  <TruncationText>{step.context}</TruncationText>
+                </Box>
+              );
+            })}
+          </Box>
+        </Box>
+      </Modal>
     </Box>
   );
 }
+
+const TruncationText = ({ children }: { children: string }) => {
+  const [isTruncated, setIsTruncated] = useMountedState(
+    children.length > TRUNCATION_LIMIT
+  );
+
+  return (
+    <Box>
+      <Text size="sm" color="neutral.6" lineClamp={isTruncated ? 4 : undefined}>
+        {children}
+      </Text>
+      {isTruncated && children.length > TRUNCATION_LIMIT && (
+        <Button
+          variant="transparent"
+          p={0}
+          onClick={() => setIsTruncated(false)}
+          rightSection={<IconArrowDown />}
+        >
+          Read More
+        </Button>
+      )}
+      {!isTruncated && children.length > TRUNCATION_LIMIT && (
+        <Button
+          variant="transparent"
+          onClick={() => setIsTruncated(true)}
+          rightSection={<IconArrowUp/>}
+          p={0}
+        >
+          Read Less
+        </Button>
+      )}
+    </Box>
+  );
+};

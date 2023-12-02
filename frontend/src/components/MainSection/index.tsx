@@ -19,9 +19,8 @@ export default function Main() {
       timestamp: new Date(),
     },
     {
-      name: "Qdrant Bot",
-      context:
-        "Greetings, I am an AI engine designed for RAG functionality. Trained on the Qdrant website, how may I be of assistance to you today?",
+      answer: "Hi, I'm a bot. How can I help you?",
+      steps: [],
       sender: "bot",
       timestamp: new Date(),
     },
@@ -42,21 +41,21 @@ export default function Main() {
 
   useEffect(() => {
     if (data) {
-      const botMessages = data.result.map((item: any) => {
-        return {
-          context: item.context,
-          name: item.name,
-          sender: "bot",
-          timestamp: new Date(),
-        };
-      });
-      setMessages([...messages, ...botMessages]);
+      
+      const botMessage = {
+        answer: data.result.response,
+        steps: data.result.steps,
+        sender: "bot",
+        timestamp: new Date(),
+      };
+      setMessages([...messages, botMessage]);
+      resetData();
     }
 
     if (error) {
       const botMessage = {
-        name: "Error",
-        context: error,
+        answer: error,
+        steps: [],
         sender: "bot",
         timestamp: new Date(),
       };
@@ -91,8 +90,8 @@ export default function Main() {
             return (
               <BotMessage
                 key={index}
-                context={message.context}
-                name={message.name}
+                answer={message.answer}
+                steps={message.steps}
                 timestamp={message.timestamp}
               />
             );
@@ -102,8 +101,8 @@ export default function Main() {
         {loading && (
           <BotMessage
             loading={loading}
-            name={"Loading..."}
-            context={"Please wait while I search for your query..."}
+            answer="Loading..."
+            steps={[]}
             timestamp={new Date()}
           />
         )}

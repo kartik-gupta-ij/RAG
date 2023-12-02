@@ -13,6 +13,7 @@ export default function InputSearch({ handleInputSearch,loading }: InputSearchPr
 
   const onEnter = () => {
     if (query) {
+      setQuery("");
       handleInputSearch(query);
     }
   };

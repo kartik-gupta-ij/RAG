@@ -82,10 +82,13 @@ class LLMQuery:
         timeout=10.0)
         steps.append({
             "name": "Answer",
-            "context": {response.choices[0].message.content}
+            "context": response.choices[0].message.content
         })
 
-        return(steps)
+        return({
+            "response" :response.choices[0].message.content,
+            "steps":steps
+        })
     
 
 

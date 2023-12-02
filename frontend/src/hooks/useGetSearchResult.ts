@@ -4,9 +4,12 @@ import useMountedState from "./useMountedState";
 
 export type searchResponse = {
   result: {
-    name: string;
-    context: string;
-  }[];
+    response: string;
+    steps: {
+      name: string;
+      context: string;
+    }[];
+  };
 };
 export const useGetSearchResult = () => {
   const [data, setData] = useMountedState<searchResponse | null>(null);
