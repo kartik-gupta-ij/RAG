@@ -1,6 +1,6 @@
 import os.path
 from rag.index.markdown_to_text import markdown_to_text
-from rag.config import QDRANT_URL, QDRANT_API_KEY, QDRANT_RAG_COLLECTION_NAME
+from rag.config import QDRANT_URL, QDRANT_API_KEY, QDRANT_RAG_COLLECTION_NAME, CONTENT_DIR
 from qdrant_client import QdrantClient
 
 
@@ -36,7 +36,7 @@ def process_file(root_dir, file_path):
         chunk_overlap = 200)
         relative_path = os.path.relpath(file_path, root_dir)
         return {
-            "metadata": [{"path":relative_path}]*len(documents),
+            "metadata": [{"path":CONTENT_DIR+relative_path}]*len(documents),
             "documents": documents,
         }
 
@@ -50,7 +50,7 @@ def explore_directory(root_dir):
     return "success"
 
 def main():
-    folder_path = os.getenv('QDRANT_PATH')+"/qdrant-landing/content/"
+    folder_path = os.getenv('QDRANT_PATH')+CONTENT_DIR
     res = explore_directory(folder_path)
     print(res)
 

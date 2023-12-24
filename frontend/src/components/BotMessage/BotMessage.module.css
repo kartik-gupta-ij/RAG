@@ -24,3 +24,9 @@
   padding-bottom: 0;
   padding-top: var(--mantine-spacing-md);
 }
+.filename {
+  margin-left: 0;
+  padding-left: 0;
+  text-decoration: underline;
+  color: var(--mantine-color-neutral-6);
+}

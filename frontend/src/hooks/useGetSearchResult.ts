@@ -2,12 +2,22 @@ import { getSearchResult } from "@/api/search";
 import { StatusCodes } from "http-status-codes";
 import useMountedState from "./useMountedState";
 
+
+
 export type searchResponse = {
   result: {
     response: string;
     steps: {
       name: string;
       context: string;
+      contextArray?:{
+        id : string;
+        embedding: string;
+        metadata: {
+          document: string;
+          path: string;
+        };
+      }[];
     }[];
   };
 };

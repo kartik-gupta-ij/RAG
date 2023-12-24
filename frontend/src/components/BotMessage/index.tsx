@@ -1,9 +1,21 @@
-import { Box, Button, Center, Loader, Modal, Text } from "@mantine/core";
+import {
+  Box,
+  Button,
+  Center,
+  Loader,
+  Modal,
+  Text,
+  ThemeIcon,
+} from "@mantine/core";
 import classes from "./BotMessage.module.css";
 import useMountedState from "@/hooks/useMountedState";
 import { searchResponse } from "@/hooks/useGetSearchResult";
 import { useDisclosure } from "@mantine/hooks";
-import { IconArrowDown, IconArrowUp, IconExternalLink} from "@tabler/icons-react";
+import {
+  IconArrowDown,
+  IconArrowUp,
+  IconExternalLink,
+} from "@tabler/icons-react";
 
 type BotMessageProps = {
   timestamp: Date;
@@ -96,6 +108,7 @@ export default function BotMessage({
                     {step.name}
                   </Text>
                   <TruncationText>{step.context}</TruncationText>
+                  {step.contextArray && <ContextArray step={step} />}
                 </Box>
               );
             })}
@@ -130,7 +143,7 @@ const TruncationText = ({ children }: { children: string }) => {
         <Button
           variant="transparent"
           onClick={() => setIsTruncated(true)}
-          rightSection={<IconArrowUp/>}
+          rightSection={<IconArrowUp />}
           p={0}
         >
           Read Less
@@ -138,4 +151,50 @@ const TruncationText = ({ children }: { children: string }) => {
       )}
     </Box>
   );
+};
+
+const ContextArray = ({
+  step,
+}: {
+  step: searchResponse["result"]["steps"][0];
+}) => {
+  if (step.contextArray) {
+    return (
+      <Box>
+        <Text pt={"md"} fw={500} size="sm" color="neutral.7">
+          Context Array
+        </Text>
+        <Box className={classes.contextArray}>
+          {step.contextArray.map((context, index: number) => {
+            return (
+              <Box className={classes.step} key={index}>
+                <Button
+                  component="a"
+                  variant="transparent"
+                  href={`https://github.com/qdrant/landing_page/blob/master/${context.metadata.path}`}
+                  target="_blank"
+                  rightSection={
+                    <ThemeIcon
+                      variant="transparent"
+                      size={30}
+                      style={{
+                        cursor: "pointer",
+                      }}
+                    >
+                      <IconExternalLink style={{ width: 18, height: 18 }} />
+                    </ThemeIcon>
+                  }
+                  className={classes.filename}
+                >
+                  {context.metadata.path}
+                </Button>
+                <TruncationText>{context.metadata.document}</TruncationText>
+              </Box>
+            );
+          })}
+        </Box>
+      </Box>
+    );
+  }
+  return null;
 };
