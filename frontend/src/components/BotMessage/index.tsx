@@ -126,7 +126,11 @@ const TruncationText = ({ children }: { children: string }) => {
 
   return (
     <Box>
-      <Text size="sm" color="neutral.6" lineClamp={isTruncated ? 4 : undefined}>
+      <Text size="sm" color="neutral.6"
+      style={{
+        whiteSpace: "pre-line",
+      }}
+      lineClamp={isTruncated ? 4 : undefined}>
         {children}
       </Text>
       {isTruncated && children.length > TRUNCATION_LIMIT && (

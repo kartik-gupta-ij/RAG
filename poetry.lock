@@ -943,6 +943,24 @@ pydantic = ">=1,<3"
 requests = ">=2,<3"
 
 [[package]]
+name = "loguru"
+version = "0.7.2"
+description = "Python logging made (stupidly) simple"
+optional = false
+python-versions = ">=3.5"
+files = [
+    {file = "loguru-0.7.2-py3-none-any.whl", hash = "sha256:003d71e3d3ed35f0f8984898359d65b79e5b21943f78af86aa5491210429b8eb"},
+    {file = "loguru-0.7.2.tar.gz", hash = "sha256:e671a53522515f34fd406340ee968cb9ecafbc4b36c679da03c18fd8d0bd51ac"},
+]
+
+[package.dependencies]
+colorama = {version = ">=0.3.4", markers = "sys_platform == \"win32\""}
+win32-setctime = {version = ">=1.0.0", markers = "sys_platform == \"win32\""}
+
+[package.extras]
+dev = ["Sphinx (==7.2.5)", "colorama (==0.4.5)", "colorama (==0.4.6)", "exceptiongroup (==1.1.3)", "freezegun (==1.1.0)", "freezegun (==1.2.2)", "mypy (==v0.910)", "mypy (==v0.971)", "mypy (==v1.4.1)", "mypy (==v1.5.1)", "pre-commit (==3.4.0)", "pytest (==6.1.2)", "pytest (==7.4.0)", "pytest-cov (==2.12.1)", "pytest-cov (==4.1.0)", "pytest-mypy-plugins (==1.9.3)", "pytest-mypy-plugins (==3.0.0)", "sphinx-autobuild (==2021.3.14)", "sphinx-rtd-theme (==1.3.0)", "tox (==3.27.1)", "tox (==4.11.0)"]
+
+[[package]]
 name = "markdown"
 version = "3.5.1"
 description = "Python implementation of John Gruber's Markdown."
@@ -1451,13 +1469,13 @@ files = [
 
 [[package]]
 name = "qdrant-client"
-version = "1.6.9"
+version = "1.7.0"
 description = "Client library for the Qdrant vector search engine"
 optional = false
 python-versions = ">=3.8,<3.13"
 files = [
-    {file = "qdrant_client-1.6.9-py3-none-any.whl", hash = "sha256:6546f96ceec389375e323586f0948a04183bd494c5c48d0f3daa267b358ad008"},
-    {file = "qdrant_client-1.6.9.tar.gz", hash = "sha256:81affd66f50aa66d60835fe2f55efe727358bf9db24eada35ff1b32794a82159"},
+    {file = "qdrant_client-1.7.0-py3-none-any.whl", hash = "sha256:ab5779cf3f008da2a801c943413423f1ff434128dfaeda031f037453e1fa8306"},
+    {file = "qdrant_client-1.7.0.tar.gz", hash = "sha256:bbe0656020c2f11061d7836b87e99ba6b50a028f5318459cc1fddf4ef73d9a8b"},
 ]
 
 [package.dependencies]
@@ -1800,6 +1818,20 @@ h11 = ">=0.8"
 standard = ["PyYAML (>=5.1)", "colorama (>=0.4)", "httptools (>=0.4.0)", "python-dotenv (>=0.13)", "uvloop (>=0.14.0,!=0.15.0,!=0.15.1)", "watchgod (>=0.6)", "websockets (>=10.0)"]
 
 [[package]]
+name = "win32-setctime"
+version = "1.1.0"
+description = "A small Python utility to set file creation time on Windows"
+optional = false
+python-versions = ">=3.5"
+files = [
+    {file = "win32_setctime-1.1.0-py3-none-any.whl", hash = "sha256:231db239e959c2fe7eb1d7dc129f11172354f98361c4fa2d6d2d7e278baa8aad"},
+    {file = "win32_setctime-1.1.0.tar.gz", hash = "sha256:15cf5750465118d6929ae4de4eb46e8edae9a5634350c01ba582df868e932cb2"},
+]
+
+[package.extras]
+dev = ["black (>=19.3b0)", "pytest (>=4.6.2)"]
+
+[[package]]
 name = "yarl"
 version = "1.9.2"
 description = "Yet another URL library"
@@ -1904,4 +1936,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.11"
-content-hash = "9827123c17cb257974daafff27e3856ce2bf00d241ec3fa2b7eac40359b35196"
+content-hash = "c3a8b0af94123e186d3f8f7228d47d53c372cd1a306715ec96993b0a5f3f820e"

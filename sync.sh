@@ -5,4 +5,6 @@ rsync -avP --exclude='venv' \
            --exclude='.idea' \
            --exclude='local_cache' \
            --exclude='.venv' \
+           --exclude='.git' \
+           --exclude='data/qdrant' \
            . $1:/mnt/RAG/
